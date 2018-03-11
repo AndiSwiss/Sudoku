@@ -3,6 +3,7 @@ public class Testing_subGroups_and_h_and_vLines {
 
 
 
+
         //for 4x4 sudokus:
         System.out.println("------------------------------------------------------------------");
         System.out.println("4x4 sudoku:");
