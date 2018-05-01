@@ -31,7 +31,7 @@ class Solution {
  * The main sudoku-class for solving sudokus
  *
  * @author AndiSwiss
- * @version 0.7b
+ * @version 0.7c
  */
 public class Sudoku {
     /**
@@ -421,12 +421,23 @@ public class Sudoku {
         return 1;
     }
 
+
     /**
      * the main sudoku-solver-method
      *
      * @return returns the number of solutions found, 0 if sudoku is not solvable
      */
     int solve() {
+        return solve(false);
+    }
+
+    /**
+     * the main sudoku-solver-method
+     *
+     * @return returns the number of solutions found, 0 if sudoku is not solvable
+     * @param printDebug prints extensive debug information
+     */
+    int solve(boolean printDebug) {
         // idea: this method should solve until no more new things were found (e.g. deleted a possibility, solved a cell....)
         // then it should return 1, if found exactly 1 definitive solution
 
@@ -442,8 +453,10 @@ public class Sudoku {
         // second index: 1-9: true; if the respective numbers were found
 
         // initial printing:
-        printFull();
-        printReport();
+        if (printDebug) {
+            printFull();
+            printReport();
+        }
 
         int completeSolvingRuns = 0;
         int[] achievedInThisRun;
@@ -459,33 +472,34 @@ public class Sudoku {
             int[] achievedSubGroups = new int[3];
 
             // run once for all unsolved hLines:
-            System.out.println("Solving all hLines:");
+            if (printDebug) System.out.println("Solving all hLines:");
             for (int i = 0; i < s; i++) {
                 // only run, if line is not yet solved:
                 if (!hSolved[i][0]) {
-                    int[] newlyAchieved = solveOneLine("hLine", i);
+                    int[] newlyAchieved = solveOneLine("hLine", i, printDebug);
                     for (int k = 0; k < newlyAchieved.length; k++) {
                         achievedHLines[k] += newlyAchieved[k];
                     }
                 }
             }
             // for extensive debugging:
-            if (achievedHLines[1] > 0 || achievedHLines[2] > 0) {
+            if (printDebug && achievedHLines[1] > 0 || achievedHLines[2] > 0) {
                 System.out.printf("Found %d new definitive solutions and removed %d possibilities when solving all hLines once\n", achievedHLines[1], achievedHLines[2]);
             }
 
             // only do this printOut in the first run (the happens a lot!):
-            if (completeSolvingRuns == 1) {
+            if (printDebug && completeSolvingRuns == 1) {
                 printFull();
                 printReport();
             }
 
 
-            System.out.println("Solving all vLines:");
+            if (printDebug) System.out.println("Solving all vLines:");
+
             for (int i = 0; i < s; i++) {
                 // only run, if line is not yet solved:
                 if (!vSolved[i][0]) {
-                    int[] newlyAchieved = solveOneLine("vLine", i);
+                    int[] newlyAchieved = solveOneLine("vLine", i, printDebug);
                     for (int k = 0; k < newlyAchieved.length; k++) {
                         achievedVLines[k] += newlyAchieved[k];
                     }
@@ -493,22 +507,23 @@ public class Sudoku {
                 }
             }
             // for extensive debugging:
-            if (achievedVLines[1] > 0 || achievedVLines[2] > 0) {
+            if (printDebug && achievedVLines[1] > 0 || achievedVLines[2] > 0) {
                 System.out.printf("Found %d new definitive solutions and removed %d possibilities when solving all vLines once\n", achievedVLines[1], achievedVLines[2]);
             }
 
             // only do this printOut in the first run (the happens a lot!):
-            if (completeSolvingRuns == 1) {
+            if (printDebug && completeSolvingRuns == 1) {
                 printFull();
                 printReport();
             }
 
 
-            System.out.println("Solving all subGroups:");
+            if (printDebug) System.out.println("Solving all subGroups:");
+
             for (int i = 0; i < s; i++) {
                 // only run, if line is not yet solved:
                 if (!subSolved[i][0]) {
-                    int[] newlyAchieved = solveOneLine("subGroup", i);
+                    int[] newlyAchieved = solveOneLine("subGroup", i, printDebug);
                     for (int k = 0; k < newlyAchieved.length; k++) {
                         achievedSubGroups[k] += newlyAchieved[k];
                     }
@@ -516,13 +531,15 @@ public class Sudoku {
                 }
             }
             // for extensive debugging:
-            if (achievedSubGroups[1] > 0 || achievedSubGroups[2] > 0) {
+            if (printDebug && achievedSubGroups[1] > 0 || achievedSubGroups[2] > 0) {
                 System.out.printf("Found %d new definitive solutions and removed %d possibilities when solving all subGroups once\n", achievedSubGroups[1], achievedSubGroups[2]);
             }
 
 
-            printFull();
-            System.out.println();
+            if (printDebug) {
+                printFull();
+                System.out.println();
+            }
 
             achievedInThisRun = new int[3];
             totalAchievedInThisRun = 0;
@@ -537,12 +554,14 @@ public class Sudoku {
                 totalAchievedInThisRun += achievedSubGroups[i];
             }
 
-            System.out.println("=========================================================================================================");
-            System.out.printf("== In this whole run, there were %d complete lines solved, %d cells solved and %d possibilities removed.\n",
-                    achievedInThisRun[0], achievedInThisRun[1], achievedInThisRun[2]);
-            System.out.println("=========================================================================================================");
+            if (printDebug) {
+                System.out.println("=========================================================================================================");
+                System.out.printf("== In this whole run, there were %d complete lines solved, %d cells solved and %d possibilities removed.\n",
+                        achievedInThisRun[0], achievedInThisRun[1], achievedInThisRun[2]);
+                System.out.println("=========================================================================================================");
 
-            printReport();
+                printReport();
+            }
 
 
             // check if unsolved Cells is 0 -> if yes, finish!
@@ -596,12 +615,13 @@ public class Sudoku {
      *
      * @param type type of the line as string (hLine, vLine or subGroup)
      * @param i    index of that line inside of hLines, vLines or subGroups
+     * @param printDebug prints debug information to the terminal
      * @return the achievements done by calling this method in an array with 3 numbers: <br>
      * - achieved[0] amount of completely solved line <br>
      * - achieved[1] amount of freshly solved cell (not, if there was already a solution present in this cell!) <br>
      * - achieved[2] amount of removed possibility*
      */
-    int[] solveOneLine(String type, int i) {
+    int[] solveOneLine(String type, int i, boolean printDebug) {
 
 
         // todo: for the return statement of this method:
@@ -638,10 +658,10 @@ public class Sudoku {
             achievedDefinitive = oneLine.lookForDefinitiveSolutions();
 
             // for extensive debugging:
-//            if (achievedDefinitive[1] > 0 || achievedDefinitive[2] > 0) {
+//            if (printDebug && achievedDefinitive[1] > 0 || achievedDefinitive[2] > 0) {
 //                System.out.printf("Found %d new definitive solutions and removed %d possibilities when calling lookForDefinitiveSolutions() for %s[%d]!\n", achievedDefinitive[1], achievedDefinitive[2], type, i);
 //            }
-            if (achievedDefinitive[0] > 0) {
+            if (printDebug && achievedDefinitive[0] > 0) {
                 System.out.printf("YES: Solved the complete line when calling lookForDefinitiveSolutions() for %s[%d]!\n", type, i);
             }
 
@@ -659,10 +679,10 @@ public class Sudoku {
                 achievedOneSolutionLeft = oneLine.lookForOneSolutionLeft();
 
                 // for extensive debugging:
-//                if (achievedOneSolutionLeft[1] > 0 || achievedOneSolutionLeft[2] > 0) {
+//                if (printDebug && achievedOneSolutionLeft[1] > 0 || achievedOneSolutionLeft[2] > 0) {
 //                    System.out.printf("Found %d new definitive solutions and removed %d possibilities when calling lookForOneSolutionLeft() for %s[%d]!\n", achievedOneSolutionLeft[1], achievedOneSolutionLeft[2], type, i);
 //                }
-                if (achievedOneSolutionLeft[0] > 0) {
+                if (printDebug && achievedOneSolutionLeft[0] > 0) {
                     System.out.printf("YES: Solved the complete line when calling lookForOneSolutionLeft() for %s[%d]!\n", type, i);
                 }
 
@@ -679,10 +699,10 @@ public class Sudoku {
                 achievedOneSpotLeft = oneLine.lookForOneSpotLeft();
 
                 // for extensive debugging:
-//                if (achievedOneSpotLeft[1] > 0 || achievedOneSpotLeft[2] > 0) {
+//                if (printDebug && achievedOneSpotLeft[1] > 0 || achievedOneSpotLeft[2] > 0) {
 //                    System.out.printf("Found %d new definitive solutions and removed %d possibilities when calling lookForOneSpotLeft() for %s[%d]!\n", achievedOneSpotLeft[1], achievedOneSpotLeft[2], type, i);
 //                }
-                if (achievedOneSpotLeft[0] > 0) {
+                if (printDebug && achievedOneSpotLeft[0] > 0) {
                     System.out.printf("YES: Solved the complete line when calling lookForOneSpotLeft() for %s[%d]!\n", type, i);
                 }
 

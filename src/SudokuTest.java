@@ -6,9 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -90,15 +88,15 @@ class SudokuTest {
          */
         @Test
         void sixtyEasy() {
-            // todo: from the files in /resources/https__kjell.haxx.se__sudoku/easy (40 known)/42341962-v3-40-L1.ss
 
-            // todo: run the test in assertAll -> see tutorial-example below "groupAssertions()"
 
             // todo: validate the input, if it has no duplicates
             // todo: generate solutions and validate, if they are possible
 
             String current = System.getProperty("user.dir");
             Path easySudokuPath = Paths.get(current, "resources/https__kjell.haxx.se__sudoku/easy (40 known)");
+//            Path easySudokuPath = Paths.get(current, "resources/https__kjell.haxx.se__sudoku/hard (26 known)");
+//            Path easySudokuPath = Paths.get(current, "resources/https__kjell.haxx.se__sudoku/extreme (17 known)");
             System.out.printf("easySudokuPath: %s\n", easySudokuPath);
             List<Path> filePaths = new ArrayList<>();
 
@@ -111,7 +109,6 @@ class SudokuTest {
                 e.printStackTrace();
             }
 
-            int counter = 0;
 
             for (Path file : filePaths) {
                 List<String> oneFile = new ArrayList<>();
@@ -135,23 +132,10 @@ class SudokuTest {
                         }).forEach(sudokuStr::add);
 
 
-//                System.out.printf("file: %s\n", file);
-//                System.out.printf("sudokuStr: %s\n", sudokuStr);
-//                for (String s : sudokuStr) {
-//                    System.out.println(s);
-//                }
-
                 Sudoku sudoku = new Sudoku(9, sudokuStr);
 
-                sudoku.solve();
-                sudoku.printFull();
-                System.out.printf("sudoku.maxSolutions: %s\n", sudoku.maxSolutions);
-
-                counter++;
-                if (counter == 3) break;
-
-
-
+                int solve = sudoku.solve();
+                assertEquals(1, solve, file.toString() + " didn't have one solution left, but " + solve + " solutions.");
             }
         }
     }

@@ -57,7 +57,7 @@ class SudokuLiveInput {
         in.close();
 
         sudoku.printFull();
-        sudoku.solve();
+        sudoku.solve(true);
         // use the following line for https://www.codingame.com/ide/puzzle/mini-sudoku-solver:
         sudoku.printFull();
 
@@ -108,7 +108,7 @@ class SudokuTestingDifficult {
         };
         Sudoku sudo4 = new Sudoku(9, sudo4Str);
         sudo4.printFull();
-        sudo4.solve();
+        sudo4.solve(true);
 //        sudo4.printEasy();
 
         System.out.println("\nsudoku.printIndexesOfCells() -> ");
