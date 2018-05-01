@@ -1,6 +1,14 @@
 import org.junit.jupiter.api.*;
 
+import java.io.IOException;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Scanner;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -82,7 +90,6 @@ class SudokuTest {
          */
         @Test
         void sixtyEasy() {
-            // todo: get all the 60 easy sudokus parsed in an arrayList
             // todo: from the files in /resources/https__kjell.haxx.se__sudoku/easy (40 known)/42341962-v3-40-L1.ss
 
             // todo: run the test in assertAll -> see tutorial-example below "groupAssertions()"
@@ -90,11 +97,62 @@ class SudokuTest {
             // todo: validate the input, if it has no duplicates
             // todo: generate solutions and validate, if they are possible
 
+            String current = System.getProperty("user.dir");
+            Path easySudokuPath = Paths.get(current, "resources/https__kjell.haxx.se__sudoku/easy (40 known)");
+            System.out.printf("easySudokuPath: %s\n", easySudokuPath);
+            List<Path> filePaths = new ArrayList<>();
+
+            try (DirectoryStream<Path> files = Files.newDirectoryStream(easySudokuPath)) {
+                for (Path found : files) {
+                    if (Files.isRegularFile(found) && found.toString().toLowerCase().endsWith(".txt"))
+                        filePaths.add(found);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            int counter = 0;
+
+            for (Path file : filePaths) {
+                List<String> oneFile = new ArrayList<>();
+                try {
+                    oneFile = Files.readAllLines(file);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                // delete irrelevant lines, change characters and save it:
+                List<String> sudokuStr = new ArrayList<>();
+                oneFile.stream()
+                        .filter(s -> s.charAt(0) != '-')
+                        .map(s -> {
+                            StringBuilder res = new StringBuilder();
+                            for (int i = 0; i < s.length(); i++) {
+                                if (s.charAt(i) == '.') res.append(' ');
+                                else if (s.charAt(i) != '!') res.append(s.charAt(i));
+                            }
+                            return res.toString();
+                        }).forEach(sudokuStr::add);
+
+
+//                System.out.printf("file: %s\n", file);
+//                System.out.printf("sudokuStr: %s\n", sudokuStr);
+//                for (String s : sudokuStr) {
+//                    System.out.println(s);
+//                }
+
+                Sudoku sudoku = new Sudoku(9, sudokuStr);
+
+                sudoku.solve();
+                sudoku.printFull();
+                System.out.printf("sudoku.maxSolutions: %s\n", sudoku.maxSolutions);
+
+                counter++;
+                if (counter == 3) break;
 
 
 
-
-
+            }
         }
     }
 
@@ -178,7 +236,6 @@ class SudokuTest {
     }
 
 
-
     /**
      * from Tutorial http://www.baeldung.com/junit-5-preview
      */
@@ -254,7 +311,7 @@ class SudokuTest {
         void shouldThrowException() {
             Throwable exception = assertThrows(UnsupportedOperationException.class, () -> {
                 throw new UnsupportedOperationException("Not supported");
-                    });
+            });
             assertEquals(exception.getMessage(), "Not supported");
         }
 

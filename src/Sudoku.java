@@ -1,4 +1,5 @@
 import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -30,7 +31,7 @@ class Solution {
  * The main sudoku-class for solving sudokus
  *
  * @author AndiSwiss
- * @version 0.7a
+ * @version 0.7b
  */
 public class Sudoku {
     /**
@@ -170,7 +171,7 @@ public class Sudoku {
     }
 
     /**
-     * sudoku-constructor, which accepts strings
+     * sudoku-constructor, which accepts String[]
      *
      * @param size      size of the sudoku (like '9' for a 9x9-sudoku)
      * @param sudokuStr sudoku as a string-array. Each horizontal line should be one string.
@@ -181,6 +182,19 @@ public class Sudoku {
         initializePossibilities();
     }
 
+    /**
+     * sudoku-constructor, which accepts List<String>
+     *
+     * @param size      size of the sudoku (like '9' for a 9x9-sudoku)
+     * @param sudokuStr sudoku as a List<String>. Each horizontal line should be one string.
+     */
+    Sudoku(int size, List<String> sudokuStr) {
+        initializeVariables(size);
+        String[] sudokuStr1 = new String[size];
+        sudokuStr1 = sudokuStr.toArray(sudokuStr1);
+        parseStringArrayToIntArray(sudokuStr1);
+        initializePossibilities();
+    }
 
     //-----------------------------------------------------//
     // Methods for the constructors:                       //
@@ -204,16 +218,21 @@ public class Sudoku {
                     }
                 } catch (NumberFormatException e) {
                     // parsing error:
-                    System.out.printf("ERROR with parsing: the provided char at line %d, position %d ('%s') is not of type int! It will be automatically set to '0'.\n", i + 1, j + 1, sudokuStr[i].charAt(j));
+                    if (sudokuStr[i].charAt(j) != ' ') {
+                        System.out.printf("ERROR with parsing: the provided char at line %d, position %d ('%s') is not of type int! It will be automatically set to '0'.\n", i + 1, j + 1, sudokuStr[i].charAt(j));
+                    }
                     // since all elements in sudoku are automatically initialized to 0, I don't have do this manually!
                 } catch (IllegalArgumentException e) {
                     // this happens, when parsing was successful, but if the number was below 0 or greater than 's'
                     // ('s' is the size of the sudoku)
-                    System.out.printf("ERROR: the provided number at line %d, position %d ('%d') is not valid (size of sudoku is %d)! It will be automatically set to '0'.\n", i + 1, j + 1, s, sudoku[i][j][0]);
+                    System.err.printf("ERROR: the provided number at line %d, position %d ('%d') is not valid (size of sudoku is %d)! It will be automatically set to '0'.\n", i + 1, j + 1, s, sudoku[i][j][0]);
+                    e.printStackTrace();
                     sudoku[i][j][0] = 0;
                 } catch (StringIndexOutOfBoundsException e) {
                     // this happens, when not enough numbers were provided per line:
-                    System.out.printf("ERROR: no number (or 0) provided at line %d, position %d! It will be automatically set to '0'.\n", i + 1, j + 1);
+
+                    // hide this error for now, because an empty cell can be zero anyhow
+//                    System.out.printf("ERROR: no number (or 0) provided at line %d, position %d! It will be automatically set to '0'.\n", i + 1, j + 1);
                     // since all elements in sudoku are automatically initialized to 0, I don't have do this manually!
                 } catch (Exception e) {
                     // if there was another error:
