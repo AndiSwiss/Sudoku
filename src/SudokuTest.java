@@ -1,5 +1,6 @@
 import org.junit.jupiter.api.*;
 
+import java.util.Arrays;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -31,14 +32,14 @@ class SudokuTest {
         @DisplayName("an easy sudoku")
         void easy1() {
             String[] sudokuStr = {"2043", "0020", "4300", "0034"};
+            String[] solutionStr = {"2143", "3421", "4312", "1234"};
 
             Sudoku sudoku = new Sudoku(4, sudokuStr);
+            Sudoku solution = new Sudoku(4, solutionStr);
+
             sudoku.solve();
 
-            sudoku.printEasy();
-
-            System.out.println("\nsudoku.printIndexesOfCells() -> ");
-            sudoku.printIndexesOfCells();
+            assertEquals(solution, sudoku);
 
         }
     }

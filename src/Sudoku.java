@@ -30,7 +30,7 @@ class Solution {
  * The main sudoku-class for solving sudokus
  *
  * @author AndiSwiss
- * @version 0.4
+ * @version 0.5
  */
 public class Sudoku {
     /**
@@ -772,6 +772,7 @@ public class Sudoku {
 
     /**
      * prints one line of a sudoku
+     *
      * @param line of the sudoku to print
      */
     void printOneLine(int[][] line) {
@@ -854,7 +855,10 @@ public class Sudoku {
     //-----------------------------------------------------//
 
     /**
-     * Tests if two sudokus are the same (only considers the field int[][][] sudoku)
+     * Tests if two sudokus are the same. <br>
+     * This only considers the actual values of the sudoku, found in sudoku[i][j][0] <br>
+     * So this method converts the sudokus from three-dimensional to two-dimensional arrays:
+     *
      * @param o other sudoku to test against
      * @return true or false
      */
@@ -862,8 +866,23 @@ public class Sudoku {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Sudoku sudoku1 = (Sudoku) o;
-        return Arrays.equals(sudoku, sudoku1.sudoku);
+        Sudoku other = (Sudoku) o;
+
+        // check if the sizes of the sudokus match:
+        if (this.s != other.s) {
+            return false;
+        }
+
+        // check if all the actual values are the same:
+        for (int i = 0; i < s; i++) {
+            for (int j = 0; j < s; j++) {
+                if (this.sudoku[i][j][0] != other.sudoku[i][j][0]) return false;
+            }
+
+        }
+
+        // if the method reached this point, the two sudokus are equal:
+        return true;
     }
 
     /**
@@ -874,4 +893,23 @@ public class Sudoku {
         return Arrays.hashCode(sudoku);
     }
 
+    /**
+     * @return the actual values of the sudoku in easy printing
+     */
+    @Override
+    public String toString() {
+        StringBuilder output = new StringBuilder();
+        output.append("Sudoku:\n");
+        for (int i = 0; i < s; i++) {
+            for (int j = 0; j < s; j++) {
+                if (sudoku[i][j][0] > 0) {
+                    output.append(sudoku[i][j][0]);
+                } else {
+                    output.append('0');
+                }
+            }
+            output.append('\n');
+        }
+        return output.toString();
+    }
 }
