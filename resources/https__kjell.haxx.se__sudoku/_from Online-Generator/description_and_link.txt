@@ -1,0 +1,15 @@
+from https://kjell.haxx.se/sudoku
+
+all sudokus should have just one possible solution.
+
+   easy = 40 unknown cells
+   hard = 26 unknown cells
+extreme = 17 unknown cells
+
+the filename is the "random seed", which can be provided at the tool at
+https://kjell.haxx.se/sudoku
+
+Sets of 6 sudokus can be downloaded easily and fast from that site
+
+
+Solutions: can not be downloaded, but viewed only, just enter the filename in the field "random seed".

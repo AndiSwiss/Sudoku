@@ -60,6 +60,7 @@ class SudokuTest {
             sudoku.solve();
             assertEquals(solution, sudoku);
         }
+
         @Test
         void easy1() {
             String[] sudokuStr = {"2043", "0020", "4300", "0034"};
@@ -71,6 +72,28 @@ class SudokuTest {
             sudoku.solve();
 
             assertEquals(solution, sudoku);
+
+        }
+
+        /**
+         * 60 easy sudokus (easy means 40 unknown cells)
+         * from https://kjell.haxx.se/sudoku/
+         * saved in /resources/https__kjell.haxx.se__sudoku/easy (40 known)/42341962-v3-40-L1.ss
+         */
+        @Test
+        void sixtyEasy() {
+            // todo: get all the 60 easy sudokus parsed in an arrayList
+            // todo: from the files in /resources/https__kjell.haxx.se__sudoku/easy (40 known)/42341962-v3-40-L1.ss
+
+            // todo: run the test in assertAll -> see tutorial-example below "groupAssertions()"
+
+            // todo: validate the input, if it has no duplicates
+            // todo: generate solutions and validate, if they are possible
+
+
+
+
+
 
         }
     }
@@ -148,7 +171,9 @@ class SudokuTest {
             Sudoku sudoku = new Sudoku(9, sudokuStr);
             Sudoku solution = new Sudoku(9, solutionStr);
             sudoku.solve();
+
             assertEquals(solution, sudoku);
+
         }
     }
 

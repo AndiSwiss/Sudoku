@@ -313,19 +313,20 @@ class BoxDrawing {
     }
 
     /**
-     * prints the sudoku in the terminal with nice box drawing
+     * Prints the sudoku in the terminal with nice box drawing. <br>
+     * <br>
+     * This method assumes int[][][] of size int[s][s][s][s + 1],
+     * but with one exception: there maybe a different amount of horizontal lines, and it still works
+     * (i tweaked the code a bit).
      *
      * @param sudoku the sudoku to print
+     * @param printPossibilities if true, the remaining possibilities are written with subscript
      */
-    void printSudoku(int[][][] sudoku) {
+    void printSudoku(int[][][] sudoku, boolean printPossibilities) {
         //--------------------------------------------------------------------------------
         // PRINTING-FUNCTIONS: WITH BOX-ART:
         // see also fantastic chart at: https://en.wikipedia.org/wiki/Box-drawing_character
         //--------------------------------------------------------------------------------
-
-        // this method assumes int[][][] of size int[s][s][s][s + 1]
-        // but with one exception: there maybe a different amount of horizontal lines, and it still works
-        // (i tweaked the code a bit)
 
         //---------
 
@@ -349,18 +350,25 @@ class BoxDrawing {
                     // use the "" +   for type-casting
                     content[j] = "" + sudoku[i][j][0];
                 } else {
-                    // if a solution is not present, print possibilities in subscript:
-                    // print " " for not present possibilities
-                    StringBuilder temp = new StringBuilder();
 
-                    for (int k = 1; k <= s; k++) {
-                        if (sudoku[i][j][k] > 0) {
-                            temp.append(returnSubscript(sudoku[i][j][k]));
-                        } else {
-                            temp.append(' ');
+                    if (printPossibilities) {
+                        // if a solution is not present, print possibilities in subscript:
+                        // print " " for not present possibilities
+                        StringBuilder temp = new StringBuilder();
+
+                        for (int k = 1; k <= s; k++) {
+                            if (sudoku[i][j][k] > 0) {
+                                temp.append(returnSubscript(sudoku[i][j][k]));
+                            } else {
+                                temp.append(' ');
+                            }
                         }
+                        content[j] = temp.toString();
+
+                    } else {
+                        //don't print the possibilities
+                        content[j] = " ";
                     }
-                    content[j] = temp.toString();
                 }
             }
 
@@ -394,7 +402,7 @@ class BoxDrawing {
         // first dimension only holds one element:
         int[][][] oneLine = new int[1][s][s + 1];
         oneLine[0] = oneSudokuLine;
-        printSudoku(oneLine);
+        printSudoku(oneLine, true);
     }
 
 

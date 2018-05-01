@@ -93,5 +93,7 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
+# custom ignored files:
+
 
 # End of https://www.gitignore.io/api/osx,intellij

@@ -30,7 +30,7 @@ class Solution {
  * The main sudoku-class for solving sudokus
  *
  * @author AndiSwiss
- * @version 0.6
+ * @version 0.7a
  */
 public class Sudoku {
     /**
@@ -720,11 +720,19 @@ public class Sudoku {
     }
 
     /**
-     * full print output with boxes
+     * full print output with boxes, with all the possibilities in subscript
      */
     void printFull() {
         BoxDrawing boxDrawing = new BoxDrawing(s, subDivision, "normal");
-        boxDrawing.printSudoku(sudoku);
+        boxDrawing.printSudoku(sudoku, true);
+    }
+
+    /**
+     * full print output with boxes, but without the possibilities, just the known values
+     */
+    void printFullWithoutPossibilities() {
+        BoxDrawing boxDrawing = new BoxDrawing(s, subDivision, "normal");
+        boxDrawing.printSudoku(sudoku, false);
     }
 
     /**
