@@ -109,6 +109,7 @@ class SudokuTest {
                 e.printStackTrace();
             }
 
+            List<String> failed = new ArrayList<>();
 
             for (Path file : filePaths) {
                 List<String> oneFile = new ArrayList<>();
@@ -135,8 +136,20 @@ class SudokuTest {
                 Sudoku sudoku = new Sudoku(9, sudokuStr);
 
                 int solve = sudoku.solve();
-                assertEquals(1, solve, file.toString() + " didn't have one solution left, but " + solve + " solutions.");
+                if (solve != 1) {
+                    Path relative = Paths.get(current).relativize(file);
+                    failed.add(relative.toString() + " didn't have one solution left, but " + solve + " solutions.");
+                }
             }
+
+            StringBuilder sb = new StringBuilder();
+            if (failed.size() > 0) {
+                sb.append(failed.size()).append(" sudokus don't have just 1 definitive solutions or were not yet solved:\n");
+                failed.forEach(s -> sb.append(s).append('\n'));
+            }
+
+            assertEquals(0, failed.size(), sb.toString());
+
         }
     }
 

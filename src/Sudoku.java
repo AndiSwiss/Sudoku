@@ -31,7 +31,7 @@ class Solution {
  * The main sudoku-class for solving sudokus
  *
  * @author AndiSwiss
- * @version 0.7c
+ * @version 0.7d
  */
 public class Sudoku {
     /**
@@ -483,7 +483,7 @@ public class Sudoku {
                 }
             }
             // for extensive debugging:
-            if (printDebug && achievedHLines[1] > 0 || achievedHLines[2] > 0) {
+            if (printDebug && (achievedHLines[1] > 0 || achievedHLines[2] > 0)) {
                 System.out.printf("Found %d new definitive solutions and removed %d possibilities when solving all hLines once\n", achievedHLines[1], achievedHLines[2]);
             }
 
@@ -507,7 +507,7 @@ public class Sudoku {
                 }
             }
             // for extensive debugging:
-            if (printDebug && achievedVLines[1] > 0 || achievedVLines[2] > 0) {
+            if (printDebug && (achievedVLines[1] > 0 || achievedVLines[2] > 0)) {
                 System.out.printf("Found %d new definitive solutions and removed %d possibilities when solving all vLines once\n", achievedVLines[1], achievedVLines[2]);
             }
 
@@ -531,7 +531,7 @@ public class Sudoku {
                 }
             }
             // for extensive debugging:
-            if (printDebug && achievedSubGroups[1] > 0 || achievedSubGroups[2] > 0) {
+            if (printDebug && (achievedSubGroups[1] > 0 || achievedSubGroups[2] > 0)) {
                 System.out.printf("Found %d new definitive solutions and removed %d possibilities when solving all subGroups once\n", achievedSubGroups[1], achievedSubGroups[2]);
             }
 
@@ -585,18 +585,25 @@ public class Sudoku {
         } while (unsolvedCells != 0 && totalAchievedInThisRun != 0 && completeSolvingRuns < 100);
 
 
-        System.out.println("======================================================================================");
-        System.out.println("==  The whole solving-Code ran " + completeSolvingRuns + " times.");
+        // setting amountOfSolutions
         if (unsolvedCells == 0) {
-            System.out.println("==  And the one and only solution was found. All cells have a definitive solution.");
             amountOfSolutions = 1;
         } else {
-            System.out.println("==  But there was not found a definitive solution. There are still " + unsolvedCells + " unsolved cells.");
-
             // todo: rewrite the following line as soon as you did the guessing stuff!
             amountOfSolutions = unsolvedCells;
         }
-        System.out.println("======================================================================================");
+
+        // printing some stuff
+        if (printDebug) {
+            System.out.println("======================================================================================");
+            System.out.println("==  The whole solving-Code ran " + completeSolvingRuns + " times.");
+            if (unsolvedCells == 0) {
+                System.out.println("==  And the one and only solution was found. All cells have a definitive solution.");
+            } else {
+                System.out.println("==  But there was not found a definitive solution. There are still " + unsolvedCells + " unsolved cells.");
+            }
+            System.out.println("======================================================================================");
+        }
 
 
         // 1 = 1 solution (should be the normal case!), more than 1 -> multiple solutions, 0 -> not solvable (but this would throw errors!)
