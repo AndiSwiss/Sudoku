@@ -30,7 +30,7 @@ class Solution {
  * The main sudoku-class for solving sudokus
  *
  * @author AndiSwiss
- * @version 0.5
+ * @version 0.6
  */
 public class Sudoku {
     /**

@@ -29,7 +29,38 @@ class SudokuTest {
     @DisplayName("Easy sudokus:")
     class EasySudokus {
         @Test
-        @DisplayName("an easy sudoku")
+        void template() {
+            // from ...
+            String[] sudokuStr = {
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+            };
+
+            String[] solutionStr = {
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+            };
+
+            Sudoku sudoku = new Sudoku(9, sudokuStr);
+            Sudoku solution = new Sudoku(9, solutionStr);
+            sudoku.solve();
+            assertEquals(solution, sudoku);
+        }
+        @Test
         void easy1() {
             String[] sudokuStr = {"2043", "0020", "4300", "0034"};
             String[] solutionStr = {"2143", "3421", "4312", "1234"};
@@ -44,12 +75,90 @@ class SudokuTest {
         }
     }
 
+    @Nested
+    @DisplayName("Hard sudokus:")
+    class HardSudokus {
+        @Test
+        void hard1() {
+            // from http://www.mathsphere.co.uk/downloads/sudoku/10203-hard.pdf
+            // 1st example
+            String[] sudokuStr = {
+                    "000000002",
+                    "000000940",
+                    "003000005",
+                    "092305074",
+                    "840000000",
+                    "067098000",
+                    "000706000",
+                    "000900020",
+                    "408500360"
+            };
+
+            String[] solutionStr = {
+                    "684159732",
+                    "751832946",
+                    "923674185",
+                    "192365874",
+                    "845217693",
+                    "367498251",
+                    "239746518",
+                    "516983427",
+                    "478521369"
+            };
+
+            Sudoku sudoku = new Sudoku(9, sudokuStr);
+            Sudoku solution = new Sudoku(9, solutionStr);
+            sudoku.solve();
+            assertEquals(solution, sudoku);
+        }
+    }
+
+    @Nested
+    @DisplayName("Very hard sudokus:")
+    class veryHardSudokus {
+        @Test
+        void veryHard1() {
+            // From http://www.7sudoku.com/view-puzzle?date=20180427
+            // For more, see http://www.7sudoku.com/very-difficult
+            // This is not solvable with a simple algorithm.
+            String[] sudokuStr = {
+                    "002000040",
+                    "000030000",
+                    "705090000",
+                    "000907000",
+                    "000002008",
+                    "009005603",
+                    "400500310",
+                    "090000000",
+                    "080040206"
+            };
+
+            String[] solutionStr = {
+                    "632851947",
+                    "918734562",
+                    "745296831",
+                    "326987154",
+                    "154362798",
+                    "879415623",
+                    "456528319",
+                    "291673485",
+                    "583149276"
+            };
+
+            Sudoku sudoku = new Sudoku(9, sudokuStr);
+            Sudoku solution = new Sudoku(9, solutionStr);
+            sudoku.solve();
+            assertEquals(solution, sudoku);
+        }
+    }
+
+
 
     /**
      * from Tutorial http://www.baeldung.com/junit-5-preview
      */
     @Nested
-    @DisplayName("Tutorial-Tests:")
+    @DisplayName("zz Tutorial-Tests:")
     @SuppressWarnings("ConstantConditions")
     class Tutorial {
         //-----------------------------------------------------------------------//

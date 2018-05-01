@@ -1,26 +1,5 @@
 import java.util.Scanner;
 
-/**
- * a simple test of a 4x4 sudoku
- */
-public class SudokuTesting1 {
-    public static void main(String[] args) {
-        String[] sudokuStr = {"2043", "0020", "4300", "0034"};
-
-        Sudoku sudoku = new Sudoku(4, sudokuStr);
-        sudoku.solve();
-
-        sudoku.printEasy();
-
-        System.out.println("\nsudoku.printIndexesOfCells() -> ");
-        sudoku.printIndexesOfCells();
-
-        // for more debugging, print individual lines:
-        sudoku.printOneLine(sudoku.hLines[2]);
-
-    }
-}
-
 
 /**
  * for testing live input in the command line
@@ -92,6 +71,8 @@ class SudokuLiveInput {
 
 /**
  * testing a difficult sudoku, which can not be solved with tbe simple algorithm
+ *
+ * todo: find the solution for it!!
  */
 class SudokuTestingDifficult {
     public static void main(String[] args) {
