@@ -4,14 +4,14 @@ public class Testing_subGroups_and_h_and_vLines {
 
 
 
-        //for 4x4 sudokus:
+        // for 4x4 sudokus:
         System.out.println("------------------------------------------------------------------");
         System.out.println("4x4 sudoku:");
         System.out.println("------------------------------------------------------------------");
         String[] sudo4Str = {"2043", "0020", "4300", "0034"};
         Sudoku sudo4 = new Sudoku(4, sudo4Str);
         //--------------------------------------------
-        //horizontal Lines:
+        // horizontal Lines:
         //--------------------------------------------
         System.out.println("\nhLines-test:");
         Sudoku hLinesCopy4 = new Sudoku(4);
@@ -21,11 +21,11 @@ public class Testing_subGroups_and_h_and_vLines {
         sudo4.printEasy();
         System.out.println("\nhLines:");
         hLinesCopy4.printEasy();
-        //test successful.
+        // test successful.
 
 
         //--------------------------------------------
-        //vertical lines:
+        // vertical lines:
         //--------------------------------------------
         System.out.println("\nvLines-test:");
         Sudoku vLinesCopy4 = new Sudoku(4);
@@ -35,11 +35,11 @@ public class Testing_subGroups_and_h_and_vLines {
         sudo4.printEasy();
         System.out.println("\nvLines:");
         vLinesCopy4.printEasy();
-        //test was successful!
+        // test was successful!
 
 
         //--------------------------------------------
-        //sub groups:
+        // sub groups:
         //--------------------------------------------
         System.out.println("\nsubGroups-test:");
         Sudoku subGroupCopy4 = new Sudoku(4);
@@ -49,11 +49,11 @@ public class Testing_subGroups_and_h_and_vLines {
         sudo4.printEasy();
         System.out.println("\nsubGroups:");
         subGroupCopy4.printEasy();
-        //test was successful!
+        // test was successful!
 
 
 
-        //for 9x9 sudokus:
+        // for 9x9 sudokus:
         System.out.println("\n------------------------------------------------------------------");
         System.out.println("9x9 sudoku:");
         System.out.println("------------------------------------------------------------------");
@@ -74,11 +74,11 @@ public class Testing_subGroups_and_h_and_vLines {
 
 
 
-        //test-code for hLines, vLines and subGroups:
+        // test-code for hLines, vLines and subGroups:
 
 
         //--------------------------------------------
-        //horizontal Lines:
+        // horizontal Lines:
         //--------------------------------------------
         System.out.println("\nhLines-test:");
         Sudoku hLinesCopy = new Sudoku(9);
@@ -88,14 +88,14 @@ public class Testing_subGroups_and_h_and_vLines {
         sudo9.printEasy();
         System.out.println("\nhLines:");
         hLinesCopy.printEasy();
-        //test successful.
+        // test successful.
 
 
         System.out.println("\nTest-Code for proving, that the arrays point to the same values:");
-        //-> hLines is a simple copy of the original array, BUT STILL POINTING TO THE EXACT SAME VALUE (the values are NOT copied)
-        //-> hLines is not really necessary, but nice for code-readability  (vLines and subGroups are way more relevant!)
+        // -> hLines is a simple copy of the original array, BUT STILL POINTING TO THE EXACT SAME VALUE (the values are NOT copied)
+        // -> hLines is not really necessary, but nice for code-readability  (vLines and subGroups are way more relevant!)
 
-        //test-code:
+        // test-code:
         System.out.println("so they point to the same object:");
         System.out.println(sudo9.sudoku[0]);
         System.out.println(hLinesCopy.sudoku[0]);
@@ -108,17 +108,17 @@ public class Testing_subGroups_and_h_and_vLines {
         hLinesCopy.sudoku[0][2][0] = -3;
         System.out.println(sudo9.sudoku[0][2][0]);
         System.out.println(hLinesCopy.sudoku[0][2][0]);
-        //reset the changed value:
+        // reset the changed value:
         hLinesCopy.sudoku[0][2][0] = 2;
 
 
-        //test was successful -> both have changed, so they reference the SAME value!
+        // test was successful -> both have changed, so they reference the SAME value!
 
 
 
 
         //--------------------------------------------
-        //vertical lines:
+        // vertical lines:
         //--------------------------------------------
         System.out.println("\nvLines-test:");
         Sudoku vLinesCopy = new Sudoku(9);
@@ -128,11 +128,11 @@ public class Testing_subGroups_and_h_and_vLines {
         sudo9.printEasy();
         System.out.println("\nvLines:");
         vLinesCopy.printEasy();
-        //test was successful!
+        // test was successful!
 
 
         //--------------------------------------------
-        //sub groups:
+        // sub groups:
         //--------------------------------------------
         System.out.println("\nsubGroups-test:");
         Sudoku subGroupCopy = new Sudoku(9);
@@ -142,7 +142,7 @@ public class Testing_subGroups_and_h_and_vLines {
         sudo9.printEasy();
         System.out.println("\nsubGroups:");
         subGroupCopy.printEasy();
-        //test was successful!
+        // test was successful!
 
 
 

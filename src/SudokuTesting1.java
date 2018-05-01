@@ -3,10 +3,10 @@ import java.util.Scanner;
 public class SudokuTesting1 {
     public static void main(String[] args) {
         //----------------------------------------------------------------------
-        //code ONLY for https://www.codingame.com/ide/puzzle/mini-sudoku-solver:
-        //code for IntelliJ -> see SudokuTesting1.java
+        // code ONLY for https://www.codingame.com/ide/puzzle/mini-sudoku-solver:
+        // code for IntelliJ -> see SudokuTesting1.java
         //----------------------------------------------------------------------
-        //code ONLY for IntelliJ:
+        // code ONLY for IntelliJ:
 
         String[] sudokuStr = {"2043", "0020", "4300", "0034"};
 
@@ -28,11 +28,11 @@ public class SudokuTesting1 {
 
 class SudokuLiveInput {
     public static void main(String[] args) {
-        //this can be used to live test ANY sudoku by entering the sudoku in the terminal:
+        // this can be used to live test ANY sudoku by entering the sudoku in the terminal:
 
         Scanner in = new Scanner(System.in);
 
-        //get the size of the sudoku:
+        // get the size of the sudoku:
         int size = 0;
         System.out.println("Please enter your sudoku.\n" +
                 "Currently, only sudokus with 4x4 and 9x9 will calculate also their respective subgroups.");
@@ -75,12 +75,12 @@ class SudokuLiveInput {
 
         Sudoku sudoku = new Sudoku(size, sudokuStr);
 
-        //close the scanner:
+        // close the scanner:
         in.close();
 
         sudoku.printFull();
         sudoku.solve();
-        //use the following line for https://www.codingame.com/ide/puzzle/mini-sudoku-solver:
+        // use the following line for https://www.codingame.com/ide/puzzle/mini-sudoku-solver:
         sudoku.printFull();
 
 
@@ -96,7 +96,7 @@ class SudokuTestingExtended {
 
 
         /*
-        //initial array with funny values (to test the error-catching:
+        // initial array with funny values (to test the error-catching:
         String[] sudokuErrorsStr = new String[4];
         sudokuErrorsStr[0] = "2043";
         sudokuErrorsStr[1] = "0a205";
@@ -106,12 +106,12 @@ class SudokuTestingExtended {
         sudokuErrors.printFull();
 */
 
-        //testing an empty 9x9 sudoku:
+        // testing an empty 9x9 sudoku:
         Sudoku sudo3 = new Sudoku(9);
         System.out.println();
         sudo3.printFull();
 
-        //testing a real 9x9 sudoku (difficult):
+        // testing a real 9x9 sudoku (difficult):
         String[] sudo4Str = {
                 "002000009",
                 "030000710",
