@@ -1,21 +1,34 @@
-public class OneSudokuLine {
-
-    // this class takes s objects (for a 9x9 sudoku, s is 9)
-    // and the corresponding solved item
-    // remember: because Arrays are objects, this local variables 'line' and 'lSolved' point to their respective original values!
+/**
+ * This class takes s objects (for a 9x9 sudoku, s is 9) and the corresponding solved item. <br>
+ * Remember: because Arrays are objects, this local variables 'line' and 'lSolved' point to their respective original values!
+ */
+class OneSudokuLine {
 
     private int[][] line;
     private boolean[] lSolved;
     private int s;
 
-    // constructor:
+    /**
+     * Constructor for OneSudokuLine.
+     *
+     * @param line    the line (can be hLine, vLine or subGroup)
+     * @param lSolved the corresponding solved-array
+     */
     OneSudokuLine(int[][] line, boolean[] lSolved) {
         this.line = line;
         this.lSolved = lSolved;
         this.s = line.length;
     }
 
-
+    /**
+     * Looks for new definitive solutions.
+     *
+     * @return the achievements done by calling this method in an array with 3 numbers: <br>
+     * - achieved[0] amount of completely solved line <br>
+     * - achieved[1] amount of freshly solved cell (not, if there was already a solution present in this cell!) <br>
+     * - achieved[2] amount of removed possibility
+     * @throws IllegalArgumentException if a duplicate was found
+     */
     int[] lookForDefinitiveSolutions() throws IllegalArgumentException {
 
         // look for definitive solutions:
@@ -51,11 +64,18 @@ public class OneSudokuLine {
                 }
             }
         }
-
-
         return achieved;
     }
 
+    /**
+     * Looks for cells with only one solution left -> turn them into definitive solutions.
+     *
+     * @return the achievements done by calling this method in an array with 3 numbers: <br>
+     * - achieved[0] amount of completely solved line <br>
+     * - achieved[1] amount of freshly solved cell (not, if there was already a solution present in this cell!) <br>
+     * - achieved[2] amount of removed possibility
+     * @throws IllegalArgumentException for various errors
+     */
     int[] lookForOneSolutionLeft() throws IllegalArgumentException {
         // look for cells with only one solution left
 
@@ -64,7 +84,6 @@ public class OneSudokuLine {
         // use achieved[0] for a completely solved line
         // use achieved[1] for a freshly solved cell (not, if there was already a solution present in this cell!)
         // use achieved[2] for a removed possibility
-
 
 
         // repeat searching, because this will have impact on the other cells! Use variable 'foundNew' for this:
@@ -118,6 +137,14 @@ public class OneSudokuLine {
 
     }
 
+    /**
+     * Looks if there is only one unsolved cell left and turn that into a definitive solution.
+     *
+     * @return the achievements done by calling this method in an array with 3 numbers: <br>
+     * - achieved[0] amount of completely solved line <br>
+     * - achieved[1] amount of freshly solved cell (not, if there was already a solution present in this cell!) <br>
+     * - achieved[2] amount of removed possibility
+     */
     int[] lookForOneSpotLeft() {
         // so check in unsolved numbers, whether n appears in only one cell -> if yes, convert to definitive solution
 
@@ -186,17 +213,26 @@ public class OneSudokuLine {
     }
 
 
+    /**
+     * called when a definitive solution of a cell was found <br>
+     * <br>
+     * This method assumes, that the definitive solution has NOT been written in to this cell without having deleted all the other possibilities in this cell!!! <br>
+     * so either: line[atCell][0] == n   AND  all line[atCell][1..9] == 0 <br>
+     * or         line[atCell][0] < 0    AND      line[atCell][n] == n    (this happens when a solution just has been found but not yet written as a definitive solution. <br>
+     * ELSE: throw errors!!! (like if there is another solution in that cell or it is 0 or whatever...) <br>
+     * <br>
+     *
+     * @param atCell (int) index of the cell in this line, in which this definitive solution should go to or already is in.
+     * @param n      (int) the number, which was found as a definitive solution
+     * @return the achievements done by calling this method in an array with 3 numbers: <br>
+     * - achieved[0] amount of completely solved line <br>
+     * - achieved[1] amount of freshly solved cell (not, if there was already a solution present in this cell!) <br>
+     * - achieved[2] amount of removed possibility
+     * @throws IllegalArgumentException for various errors
+     */
     private int[] foundDefinitiveSolution(int atCell, int n) throws IllegalArgumentException {
-        // n is the number, which was found as a definitive solution
-        // atCell is the cell, in which this definitive solution should go to or already is in.
 
-
-        // this method assumes, that the definitive solution has NOT been written in to this cell without having deleted all the other possibilities in this cell!!!
-        // so either: line[atCell][0] == n   AND  all line[atCell][1..9] == 0
-        // or         line[atCell][0] < 0    AND      line[atCell][n] == n    (this happens when a solution just has been found but not yet written as a definitive solution.
-        // ELSE: throw errors!!! (like if there is another solution in that cell or it is 0 or whatever...)
-
-        // for the return statement, do this:
+        // for the return statement, track achievements with:
         int[] achieved = new int[3];
         // use achieved[0] for a completely solved line
         // use achieved[1] for a freshly solved cell (not, if there was already a solution present in this cell!)
@@ -295,6 +331,10 @@ public class OneSudokuLine {
     //-----------------------------------------------------
     // PRINTING-FUNCTIONS:
     //-----------------------------------------------------
+
+    /**
+     * prints a line in a box
+     */
     void printLineBox() {
 
         // printing line:
@@ -333,7 +373,6 @@ public class OneSudokuLine {
             System.out.println();
         }
     }
-
 
 
 }

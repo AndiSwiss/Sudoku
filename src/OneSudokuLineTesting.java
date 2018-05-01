@@ -1,3 +1,6 @@
+/**
+ * Testing class for OneSudokuLine
+ */
 public class OneSudokuLineTesting {
     public static void main(String[] args) {
         // for 9x9 sudokus:

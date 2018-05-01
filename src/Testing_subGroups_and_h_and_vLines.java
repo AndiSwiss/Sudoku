@@ -1,3 +1,6 @@
+/**
+ * Testing class for testing subGroups, hLines and vLines
+ */
 public class Testing_subGroups_and_h_and_vLines {
     public static void main(String[] args) {
 

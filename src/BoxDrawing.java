@@ -1,3 +1,6 @@
+/**
+ * simple test-class for BoxDrawing
+ */
 class BoxDrawingTesting {
     public static void main(String[] args) {
         // see also https://en.wikipedia.org/wiki/Box-drawing_character
@@ -26,11 +29,18 @@ class BoxDrawingTesting {
     }
 }
 
-public class BoxDrawing {
+/**
+ * draws nice looking boxes in the terminal
+ */
+class BoxDrawing {
     private int s;
     private int d;
-    private String style; // can be "normal and fat", "normal and double", "very thin and fat" and "very thin and double"  (very thin is with dotted lines)
-    // or without a division, it can also be "normal", "thin", "double" or "fat"
+
+    /**
+     * style can be "normal and fat", "normal and double", "very thin and fat" and "very thin and double"
+     * (very thin is with dotted lines) or without a division, it can also be "normal", "thin", "double" or "fat"
+     */
+    private String style; //
 
     // StylingVariables:
     // set them with the "setStyle"-Setter:
@@ -70,7 +80,13 @@ public class BoxDrawing {
     private char bottomDoubleUpDouble;
 
 
-    // constructor:
+    /**
+     * constructor for BoxDrawing with sub divisions
+     *
+     * @param size        horizontal and vertical size (is always the same)
+     * @param subDivision for visual sub divisions (use 0 for no sub divisions)
+     * @param style       the graphical style of the boxes
+     */
     BoxDrawing(int size, int subDivision, String style) {
         s = size;
         d = subDivision;
@@ -82,14 +98,27 @@ public class BoxDrawing {
         }
     }
 
-    // constructor:
+    /**
+     * constructor for BoxDrawing without sub divisions
+     *
+     * @param size  horizontal and vertical size (is always the same)
+     * @param style he graphical style of the boxes
+     */
     BoxDrawing(int size, String style) {
         s = size;
         d = size;
         setStyle(style);
     }
 
-    // line drawing:
+    //-----------------------------------//
+    // line drawing                      //
+    //-----------------------------------//
+
+    /**
+     * top line
+     *
+     * @return the whole line as a string
+     */
     String topLine() {
         StringBuilder result = new StringBuilder();
         result.append(cornerDoubleTopLeft);
@@ -104,12 +133,17 @@ public class BoxDrawing {
                 result.append(cornerDoubleTopRight);
             } else {
                 result.append(topDoubleDownSingle);
-
             }
         }
         return result.toString();
     }
 
+    /**
+     * regular body line with box drawing and content
+     *
+     * @param content to display inside the box
+     * @return the whole line as a string
+     */
     String regularBodyLine(String[] content) {
         StringBuilder result = new StringBuilder();
         result.append(verticalDouble);
@@ -128,8 +162,7 @@ public class BoxDrawing {
                 for (int j = content[i].length(); j < s - 1; j++) {
                     result.append(' ');
                 }
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 // if content[i] is not present, then append spaces in the size of s:
                 for (int j = 0; j < s; j++) {
                     result.append(' ');
@@ -146,6 +179,11 @@ public class BoxDrawing {
         return result.toString();
     }
 
+    /**
+     * middle line single (for normal box line)
+     *
+     * @return the whole line as a string
+     */
     String middleLineSingle() {
         StringBuilder result = new StringBuilder();
         result.append(leftDoubleRightSingle);
@@ -166,6 +204,11 @@ public class BoxDrawing {
         return result.toString();
     }
 
+    /**
+     * middle line double (for showing a division)
+     *
+     * @return the whole line as a string
+     */
     String middleLineDouble() {
         StringBuilder result = new StringBuilder();
         result.append(leftDoubleRightDouble);
@@ -186,6 +229,11 @@ public class BoxDrawing {
         return result.toString();
     }
 
+    /**
+     * bottom line
+     *
+     * @return the whole line as a string
+     */
     String bottomLine() {
         StringBuilder result = new StringBuilder();
         result.append(cornerDoubleBottomLeft);
@@ -206,13 +254,21 @@ public class BoxDrawing {
         return result.toString();
     }
 
+    /**
+     * defines the style of the box drawing
+     *
+     * @param style as string: "normal and fat" or "normal and double" or "very thin and fat" or "very thin and double"
+     */
     private void setStyle(String style) {
         switch (style) {
             case "normal and fat":
+                // todo: define style "normal and fat"
                 // break;                // uncomment, as soon as the style is defined
             case "normal and double":
+                // todo: define style "normal and double"
                 // break;                // uncomment, as soon as the style is defined
             case "very thin and fat":
+                // todo: define style "very thin and fat"
                 // break;                // uncomment, as soon as the style is defined
             case "very thin and double":
                 //  break;   // no break, since this is equal to the default state:
@@ -256,7 +312,12 @@ public class BoxDrawing {
         }
     }
 
-    public void printSudoku(int[][][] sudoku) {
+    /**
+     * prints the sudoku in the terminal with nice box drawing
+     *
+     * @param sudoku the sudoku to print
+     */
+    void printSudoku(int[][][] sudoku) {
         //--------------------------------------------------------------------------------
         // PRINTING-FUNCTIONS: WITH BOX-ART:
         // see also fantastic chart at: https://en.wikipedia.org/wiki/Box-drawing_character
@@ -323,7 +384,12 @@ public class BoxDrawing {
         }
     }
 
-    public void printOneSudokuLine(int[][] oneSudokuLine) {
+    /**
+     * prints one life of the sudoku in the terminal with nice box drawing
+     *
+     * @param oneSudokuLine the sudoku line to print
+     */
+    void printOneSudokuLine(int[][] oneSudokuLine) {
         // convert to 3 dimensional object and use the printSudoku()-method:
         // first dimension only holds one element:
         int[][][] oneLine = new int[1][s][s + 1];
@@ -331,7 +397,13 @@ public class BoxDrawing {
         printSudoku(oneLine);
     }
 
-    // used by printSudoku(), to print small numbers (unicode subscript)
+
+    /**
+     * used by printSudoku(), to print small numbers (unicode subscript)
+     *
+     * @param number (int) number to print
+     * @return (char) the unicode subscript of the given number
+     */
     private char returnSubscript(int number) {
         // return superscript numbers:
         // with Unicode superscript symbols: https://en.wikipedia.org/wiki/Unicode_subscripts_and_superscripts

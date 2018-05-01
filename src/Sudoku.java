@@ -29,26 +29,112 @@ class Solution {
  * The main sudoku-class for solving sudokus
  *
  * @author AndiSwiss
- * @version 0.2
+ * @version 0.3
  */
 public class Sudoku {
+    /**
+     * set the size of the sudoku (like '9' for a 9x9-sudoku)
+     */
+    int s;
 
-    //---------------------------------------------------------------------------------
-    // VARIABLES: (for detailed explanation -> see the initializeVariables(size)-method!
-    //---------------------------------------------------------------------------------
-    int s;              // size
-    int[][][] sudoku;   // three-dimensional sudoku
+    /**
+     * three-dimensional sudoku <br>
+     * <br>
+     * 1st dimension (size s): line (vertical) <br>
+     * 2nd dimension (size s): position in the line (horizontal) <br>
+     * 3rd dimension (size s + 1!!!): <br>
+     * Initialization would be like this: sudoku = new int[s][s][s + 1] <br>
+     * Conventions to 3rd dimension: <br>
+     * - sudoku[i][j][0] is used for the following stuff: <br>
+     * -> if it is positive, then this is the definitive solution <br>
+     * -> it it is negative, it shows the still possible solutions. -9 means 9 possible solutions, -2 means 2 possible solutions,... <br>
+     * -> so the given 0 at the input are converted to  '-s' (the size of the sudoku, so for a 9x9, this would result in '-9') <br>
+     * -> So, if sudoku[i][j][0] == 0, then there is NO possible solution and the sudoku would be unsolvable! <br>
+     * If that would happen, then print an error-message immediately and abort the program! <br>
+     * <br>
+     * - If sudoku[i][j][1] = 1 -> 1 is a possible solution, if sudoku[i][j][1] = 0, then 1 is not a possible solution.
+     * Like this, I can track, if 1-s (s = size of sudoku) are possible solutions in this field. <br>
+     * - If the solution is found (meaning sudoku[i][j][0] > 0), then all other places should be 0. <br>
+     */
+    int[][][] sudoku;   //
+
+    /**
+     * maximum number of possible solutions <br>
+     * gets initialized with the size of the sudoku but should normally go down to 1.
+     * But there are sudokus with more than one solution)
+     */
     int maxSolutions;
+
+    /**
+     * tracks the already solved numbers in the horizontal lines: <br>
+     * first index is the line <br>
+     * second index: 0: true, if ALL numbers of the line were found <br>
+     * second index: 1-9: true; if the respective numbers were found <br>
+     * <p>
+     * example: <br>
+     * if hSolved[4][0] == false, then there are still unsolved numbers in line 4! <br>
+     * if hSolved[4][0] == true, then ALL numbers have been found in line 4! <br>
+     * for all the others (e.g. hSolved[4][5]: <br>
+     * == false means, that in line 4, the number 5 has not been found yet <br>
+     * == true means, that in line 4, the number 5 has been found <br>
+     */
     boolean[][] hSolved;
+
+    /**
+     * tracks the already solved numbers in the vertical lines: <br>
+     * first index is the line <br>
+     * second index: 0: true, if ALL numbers of the line were found <br>
+     * second index: 1-9: true; if the respective numbers were found <br>
+     * <p>
+     * example: <br>
+     * if vSolved[4][0] == false, then there are still unsolved numbers in line 4! <br>
+     * if vSolved[4][0] == true, then ALL numbers have been found in line 4! <br>
+     * for all the others (e.g. vSolved[4][5]: <br>
+     * == false means, that in line 4, the number 5 has not been found yet <br>
+     * == true means, that in line 4, the number 5 has been found <br>
+     */
     boolean[][] vSolved;
+
+    /**
+     * tracks the already solved numbers of the subDivisions: <br>
+     * first index is the line <br>
+     * second index: 0: true, if ALL numbers of the line were found <br>
+     * second index: 1-9: true; if the respective numbers were found <br>
+     * <p>
+     * example: <br>
+     * if hSolved[4][0] == false, then there are still unsolved numbers in line 4! <br>
+     * if hSolved[4][0] == true, then ALL numbers have been found in line 4! <br>
+     * for all the others (e.g. hSolved[4][5]: <br>
+     * == false means, that in line 4, the number 5 has not been found yet <br>
+     * == true means, that in line 4, the number 5 has been found <br>
+     */
     boolean[][] subSolved;
 
+    /**
+     * used for subDivisions: <br>
+     * - in 9x9 sudoku -> subDivision = 3 <br>
+     * - in 4x4 sudoku -> subDivision = 2 <br>
+     * <br>
+     * Gets defined in initializeVariables()
+     */
     private int subDivision;
 
     // for the sudoku solver:
-    int[][][] hLines;  // actual copy of the original sudoku (points to the same values as the original sudoku)
-    int[][][] vLines;  // swapped vertical with horizontal lines -> for the solver to check one vertical line
-    int[][][] subGroups;  // contains the subGroups -> for the solver to check one subGroup
+
+    /**
+     * actual copy of the original sudoku (points to the same values as the original sudoku)
+     */
+    int[][][] hLines;
+
+    /**
+     * swapped vertical with horizontal lines -> for the solver to check one vertical line
+     */
+    int[][][] vLines;
+
+    /**
+     * contains the subGroups -> for the solver to check one subGroup
+     */
+    int[][][] subGroups;
 
     //-----------------------------------------------------
     // CONSTRUCTORS:
@@ -57,7 +143,7 @@ public class Sudoku {
     /**
      * simple Sudoku constructor
      *
-     * @param size size of the sudoku (like '9' for a 9x9-sudoku)
+     * @param size size of the sudoku
      */
     Sudoku(int size) {
         initializeVariables(size);
@@ -68,7 +154,7 @@ public class Sudoku {
     /**
      * sudoku-constructor, which accepts an two-dimensional int-array (converting it to a three-dimensional int-array:
      *
-     * @param size size of the sudoku (like '9' for a 9x9-sudoku)
+     * @param size   size of the sudoku (like '9' for a 9x9-sudoku)
      * @param sudoku sudoku as two-dimensional array
      */
     Sudoku(int size, int[][] sudoku) {
@@ -85,7 +171,7 @@ public class Sudoku {
     /**
      * sudoku-constructor, which accepts strings
      *
-     * @param size size of the sudoku (like '9' for a 9x9-sudoku)
+     * @param size      size of the sudoku (like '9' for a 9x9-sudoku)
      * @param sudokuStr sudoku as a string-array. Each horizontal line should be one string.
      */
     Sudoku(int size, String[] sudokuStr) {
@@ -101,6 +187,7 @@ public class Sudoku {
 
     /**
      * method to parse a String[] in to int[][][]:
+     *
      * @param sudokuStr sudoku as a string-array. Each horizontal line should be one string.
      */
     private void parseStringArrayToIntArray(String[] sudokuStr) {
@@ -143,60 +230,18 @@ public class Sudoku {
         }
     }
 
-    // initialize most of the variables:
+    /**
+     * initializes most of the variables
+     *
+     * @param size size of the sudoku
+     */
     private void initializeVariables(int size) {
-        //-----------------------------------------------------
-        // INITIALIZE SOME VARIABLES (with explanations)
-        //-----------------------------------------------------
-
-        // set the size of the sudoku: -> that means, that will be used a lot!
-        // maximum size: 9 (otherwise, code for parsing has to be rewritten; the rest should work)
         s = size;
-
-        //-----------------------------------------------------
-        // THREE DIMENSIONAL IDEA:
-        //-----------------------------------------------------
-        // 1st dimension (size s): line (vertical)
-        // 2nd dimension (size s): position in the line (horizontal)
-        // 3rd dimension (size s + 1!!!):
-        // Initialization would be like this: sudoku = new int[s][s][s + 1]
-        //    Conventions to 3rd dimension:
-        //    - sudoku[i][j][0] is used for the following stuff:
-        //      -> if it is positive, then this is the definitive solution
-        //      -> it it is negative, it shows the still possible solutions. -9 means 9 possible solutions, -2 means 2 possible solutions,...
-        //      -> so the given 0 at the input are converted to  '-s' (the size of the sudoku, so for a 9x9, this would result in '-9')
-        //      -> So, if sudoku[i][j][0] == 0, then there is NO possible solution and the sudoku would be unsolvable!
-        //         If that would happen, then print an error-message immediately and abort the program!
-        //
-        //    - If sudoku[i][j][1] = 1 -> 1 is a possible solution, if sudoku[i][j][1] = 0, then 1 is not a possible solution.
-        //      Like this, I can track, if 1-s (s = size of sudoku) are possible solutions in this field.
-        //    - If the solution is found (meaning sudoku[i][j][0] > 0), then all other places should be 0.
         sudoku = new int[s][s][s + 1];
-
-
-        // set variable to the current maximum of possibilities in all the positions (adjust later)
-        // is not in a constructor -> the constructor initializes it with s:
         maxSolutions = s;
-
-        // track the already solved numbers in a line:
-        // first index is the line
-        // second index: 0: true, if ALL numbers of the line were found
-        // second index: 1-9: true; if the respective numbers were found
-        //
-        // example:
-        // if hSolved[4][0] == false, then there are still unsolved numbers in line 4!
-        // if hSolved[4][0] == true, then ALL numbers have been found in line 4!
-        // for all the others (e.g. hSolved[4][5] == false means, that in line 4, the number 5 has not been found yet
-        //                                        == true means, that in line 4, the number 5 has been found
-
-        // horizontally:
         hSolved = new boolean[s][s + 1];
-        // vertically:
         vSolved = new boolean[s][s + 1];
-
-        // sub-groups:
         subSolved = new boolean[s][s + 1];
-
 
         // init subDivision:
         if (s == 4) {
@@ -208,14 +253,14 @@ public class Sudoku {
             subDivision = 0;
         }
 
-
         // initialize the arrays hLines, vLines and subGroups
         // (which are essentially just reordered copies of the original, actually hLines is identical to the original, but is nice for readability)
         initializeHLinesVLinesAndSubGroups();
-
-
     }
 
+    /**
+     * initializes the int[][][]-variables hLines, vLines and subGroups.
+     */
     private void initializeHLinesVLinesAndSubGroups() {
         //--------------------------------------------
         // init hLines[][][]  (horizontal lines):
@@ -309,10 +354,14 @@ public class Sudoku {
         }
     }
 
-    // initialize sudoku with all possible solutions for the not solved cells, and more:
+    /**
+     * initialize sudoku with all possible solutions for the not solved cells. <br>
+     * <br>
+     * In detail: <br>
+     * - convert all the unsolved positions, that means '0', to '-s', that means to the maximal possible solutions for this field
+     * - also set all possible solutions (necessary, because I will build on that later on)
+     */
     private void initializePossibilities() {
-        // convert all the unsolved positions, that means '0', to '-s', that means to the maximal possible solutions for this field:
-        // and also set all possible solutions (necessary, because I will build on that later on):
         for (int i = 0; i < s; i++) {
             for (int j = 0; j < s; j++) {
                 if (sudoku[i][j][0] == 0) {
@@ -323,7 +372,6 @@ public class Sudoku {
                         sudoku[i][j][n] = n;
                     }
                 }
-
             }
         }
     }
@@ -332,8 +380,13 @@ public class Sudoku {
     //-----------------------------------------------------
     // SUDOKU-SOLVING:
     //-----------------------------------------------------
+
+    /**
+     * dummy-code for first testing
+     *
+     * @return returns the number of solutions found, 0 if sudoku is not solvable
+     */
     int solveDummy4by4() {
-        // dummy-code for first testing:
         int[][] solution1 = {
                 {2, 1, 4, 3},
                 {3, 4, 2, 1},
@@ -348,8 +401,11 @@ public class Sudoku {
         return 1;
     }
 
-
-    // actual sudoku-solver-code:
+    /**
+     * the main sudoku-solver-method
+     *
+     * @return returns the number of solutions found, 0 if sudoku is not solvable
+     */
     int solve() {
         // idea: this method should solve until no more new things were found (e.g. deleted a possibility, solved a cell....)
         // then it should return 1, if found exactly 1 definitive solution
@@ -405,7 +461,6 @@ public class Sudoku {
             }
 
 
-
             System.out.println("Solving all vLines:");
             for (int i = 0; i < s; i++) {
                 // only run, if line is not yet solved:
@@ -446,7 +501,6 @@ public class Sudoku {
             }
 
 
-
             printFull();
             System.out.println();
 
@@ -480,7 +534,6 @@ public class Sudoku {
                     }
                 }
             }
-
 
 
             // todo: write code if a solution can only be found with guessing:
@@ -518,6 +571,16 @@ public class Sudoku {
         // todo: also check, if I only found the solution by guessing -> look at the solution BEFORE the guessing with the left over unsolved cells!!
     }
 
+    /**
+     * solves one sudoku-line
+     *
+     * @param type type of the line as string (hLine, vLine or subGroup)
+     * @param i    index of that line inside of hLines, vLines or subGroups
+     * @return the achievements done by calling this method in an array with 3 numbers: <br>
+     * - achieved[0] amount of completely solved line <br>
+     * - achieved[1] amount of freshly solved cell (not, if there was already a solution present in this cell!) <br>
+     * - achieved[2] amount of removed possibility*
+     */
     int[] solveOneLine(String type, int i) {
 
 
@@ -627,7 +690,9 @@ public class Sudoku {
     // PRINTING-FUNCTIONS:
     //-----------------------------------------------------
 
-    // easy output, also suitable for https://www.codingame.com/ide/puzzle/mini-sudoku-solver:
+    /**
+     * easy print output, also suitable for https://www.codingame.com/ide/puzzle/mini-sudoku-solver:
+     */
     void printEasy() {
         for (int i = 0; i < s; i++) {
             for (int j = 0; j < s; j++) {
@@ -641,7 +706,9 @@ public class Sudoku {
         }
     }
 
-    // easy output, also suitable for https://www.codingame.com/ide/puzzle/mini-sudoku-solver:
+    /**
+     * easy print output, also suitable for https://www.codingame.com/ide/puzzle/mini-sudoku-solver:
+     */
     void printMiniSudokuSolver() {
         for (int i = 0; i < s; i++) {
             for (int j = 0; j < s; j++) {
@@ -651,11 +718,17 @@ public class Sudoku {
         }
     }
 
+    /**
+     * full print output with boxes
+     */
     void printFull() {
         BoxDrawing boxDrawing = new BoxDrawing(s, subDivision, "normal");
         boxDrawing.printSudoku(sudoku);
     }
 
+    /**
+     * prints a report of unsolved cells and lines
+     */
     void printReport() {
         System.out.println("\n---------------------------------------------");
         System.out.println("Report:");
@@ -696,6 +769,10 @@ public class Sudoku {
         System.out.println("---------------------------------------------\n");
     }
 
+    /**
+     * prints one line of a sudoku
+     * @param line of the sudoku to print
+     */
     void printOneLine(int[][] line) {
 
         BoxDrawing boxDrawing = new BoxDrawing(s, subDivision, "normal");
@@ -703,6 +780,9 @@ public class Sudoku {
         boxDrawing.printOneSudokuLine(line);
     }
 
+    /**
+     * prints all the indexes of the cells
+     */
     void printIndexesOfCells() {
         // nice for debugging:
 
@@ -766,281 +846,4 @@ public class Sudoku {
         System.out.println(bottomLine);
 
     }
-
-
-    //-----------------------------------
-    // OLD CODE - KEEP FOR BACKUP PURPOSES
-    //-----------------------------------
-    // they are marked as comments inside, so they don't get compiled anymore:
-
-    void printFullBackup() {
-/*
-        //--------------------------------------------------------------------------------
-        // PRINTING-FUNCTIONS: WITH BOX-ART:
-        // see also fantastic chart at: https://en.wikipedia.org/wiki/Box-drawing_character
-        //--------------------------------------------------------------------------------
-
-        //---------
-
-        // top line:
-        System.out.print("\u250F");
-        for (int i = 0; i < s; i++) {
-            for (int j = 0; j < s; j++) {
-                System.out.print("\u2501");
-            }
-            // additional | in 4x4-sudoku after 2nd and 9x9-sudoku after 3rd and 6th:
-            if ((s == 4 && i == 1) || (s == 9 && (i == 2 || i == 5))) {
-                System.out.print("\u2533");
-            } else if (i == s - 1) {
-                System.out.print("\u2513");
-            } else {
-                System.out.print("\u252F");
-
-            }
-
-        }
-        System.out.println();
-
-        //-----
-        // body:
-        for (int i = 0; i < s; i++) {
-            System.out.print("\u2503");
-            for (int j = 0; j < s; j++) {
-
-                // if a solution is present:
-                if (sudoku[i][j][0] > 0) {
-                    System.out.print(" " + sudoku[i][j][0]);
-                    for (int k = 2; k < s; k++) {
-                        System.out.print(" ");
-                    }
-                }
-
-                // if a solution is not present, print possibilities:
-                // print " " for not present possibilities
-                else {
-                    for (int k = 1; k <= s; k++) {
-                        if (sudoku[i][j][k] > 0) {
-                            printSubscript(sudoku[i][j][k]);
-                        } else {
-                            System.out.print(" ");
-                        }
-                    }
-                }
-
-                // additional | in 4x4-sudoku after 2nd and 9x9-sudoku after 3rd and 6th:
-                if ((s == 4 && j == 1) || (s == 9 && (j == 2 || j == 5)) || j == s - 1) {
-                    System.out.print("\u2503");
-                } else {
-                    System.out.print("\u250A");  //or \u2502 for standard vertical line or \u2506 for differently dotted
-                }
-            }
-            System.out.println();
-
-            //-------------
-            // bottom lines:
-
-            // first char (different branches for fat lines or thin lines or last line):
-            if ((s == 4 && i == 1) || (s == 9 && (i == 2 || i == 5))) {
-                // thick lines:
-                System.out.print("\u2523");
-            } else if (i == s - 1) {
-                // last line:
-                System.out.print("\u2517");
-            } else {
-                // standard line:
-                System.out.print("\u2520");
-            }
-
-
-            for (int j = 0; j < s; j++) {
-
-                // different horizontal lines in 4x4-sudoku after 2nd and 9x9-sudoku after 3rd and 6th AND for last line:
-                if ((s == 4 && i == 1) || (s == 9 && (i == 2 || i == 5))) {
-                    // thick horizontal lines:
-                    for (int k = 0; k < s; k++) {
-                        System.out.print("\u2501");
-                    }
-
-                    // crosses at intersections:
-                    if ((s == 4 && j == 1) || (s == 9 && (j == 2 || j == 5))) {
-                        System.out.print("\u254B");
-
-                    } else if (j == s - 1) {
-                        // Last line:
-                        System.out.print("\u252B");
-                    } else {
-                        System.out.print("\u253F");
-                    }
-
-
-                } else if (i == s - 1) {
-                    // last horizontal line:
-                    for (int k = 0; k < s; k++) {
-                        System.out.print("\u2501");
-                    }
-
-                    // crosses at intersections:
-                    if ((s == 4 && j == 1) || (s == 9 && (j == 2 || j == 5))) {
-                        System.out.print("\u253B");
-
-                    } else if (j == s - 1) {
-                        // Last line:
-                        System.out.print("\u251B");
-                    } else {
-                        System.out.print("\u2537");
-                    }
-
-                } else {
-                    for (int k = 0; k < s; k++) {
-                        // standard horizontal lines:
-                        System.out.print("\u2508");   //or  \u2500 for standard line or \u2504 for differently dotted!
-                    }
-
-                    // crosses at intersections:
-                    if ((s == 4 && j == 1) || (s == 9 && (j == 2 || j == 5))) {
-                        System.out.print("\u2542");
-
-                    } else if (j == s - 1) {
-                        // Last line:
-                        System.out.print("\u2528");
-                    } else {
-                        System.out.print("\u253C");
-                    }
-                }
-
-
-            }
-            System.out.println();
-        }
-*/
-    }
-
-    void printFullBackupOld() {
-/*
-        //-----------------------------------------------------
-        // BEFORE THE BOX-ART-STUFF!!!
-        //-----------------------------------------------------
-
-        // yet without possible solutions, just known elements:
-        // works currently for 4x4 sudoku:
-
-        // top line:
-        System.out.print("\u2016");
-        for (int i = 0; i < s; i++) {
-            for (int j = 0; j < s; j++) {
-                System.out.print("=");
-            }
-            // additional | in 4x4-sudoku after 2nd and 9x9-sudoku after 3rd and 6th:
-            if ((s == 4 && i == 1) || (s == 9 && (i == 2 || i == 5)) || i == s - 1) {
-                System.out.print("\u2016");
-            } else {
-                System.out.print("|");
-
-            }
-
-        }
-        System.out.println();
-
-        // body:
-        for (int i = 0; i < s; i++) {
-            System.out.print("\u2016");
-            for (int j = 0; j < s; j++) {
-
-                // if a solution is present:
-                if (sudoku[i][j][0] > 0) {
-                    System.out.print(" " + sudoku[i][j][0]);
-                    for (int k = 2; k < s; k++) {
-                        System.out.print(" ");
-                    }
-                }
-
-                // if a solution is not present, print possibilities:
-                // print " " for not present possibilities
-                else {
-                    for (int k = 1; k <= s; k++) {
-                        if (sudoku[i][j][k] > 0) {
-                            printSubscript(sudoku[i][j][k]);
-                        } else {
-                            System.out.print(" ");
-                        }
-                    }
-                }
-
-                // additional | in 4x4-sudoku after 2nd and 9x9-sudoku after 3rd and 6th:
-                if ((s == 4 && j == 1) || (s == 9 && (j == 2 || j == 5)) || j == s - 1) {
-                    System.out.print("\u2016");
-                } else {
-                    System.out.print("|");
-                }
-            }
-            System.out.println();
-
-            // bottom lines:
-            System.out.print("\u2016");
-            for (int j = 0; j < s; j++) {
-
-
-                // different symbol lines in 4x4-sudoku after 2nd and 9x9-sudoku after 3rd and 6th AND for last line:
-                if ((s == 4 && i == 1) || (s == 9 && (i == 2 || i == 5)) || i == s - 1) {
-                    for (int k = 0; k < s; k++) {
-                        System.out.print("=");
-                    }
-                } else {
-                    for (int k = 0; k < s; k++) {
-                        System.out.print("-");
-                    }
-                }
-
-                // additional | in 4x4-sudoku after 2nd and 9x9-sudoku after 3rd and 6th:
-                if ((s == 4 && j == 1) || (s == 9 && (j == 2 || j == 5)) || j == s - 1) {
-                    System.out.print("\u2016");
-                } else {
-                    System.out.print("|");
-                }
-
-            }
-            System.out.println();
-        }
-*/
-    }
-
-    // used by printFullBackup(), to print small numbers (unicode subscript)
-    private void printSubscript(int number) {
-/*
-        // print small numbers:
-        // with Unicode superscript symbols: https://en.wikipedia.org/wiki/Unicode_subscripts_and_superscripts
-        // and https://stackoverflow.com/questions/5585919/creating-unicode-character-from-its-number
-        switch (number) {
-            case 1:
-                System.out.print("\u2081");
-                break;
-            case 2:
-                System.out.print("\u2082");
-                break;
-            case 3:
-                System.out.print("\u2083");
-                break;
-            case 4:
-                System.out.print("\u2084");
-                break;
-            case 5:
-                System.out.print("\u2085");
-                break;
-            case 6:
-                System.out.print("\u2086");
-                break;
-            case 7:
-                System.out.print("\u2087");
-                break;
-            case 8:
-                System.out.print("\u2088");
-                break;
-            case 9:
-                System.out.print("\u2089");
-                break;
-        }
-*/
-    }
-
-
 }

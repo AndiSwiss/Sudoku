@@ -1,13 +1,10 @@
 import java.util.Scanner;
 
+/**
+ * a simple test of a 4x4 sudoku
+ */
 public class SudokuTesting1 {
     public static void main(String[] args) {
-        //----------------------------------------------------------------------
-        // code ONLY for https://www.codingame.com/ide/puzzle/mini-sudoku-solver:
-        // code for IntelliJ -> see SudokuTesting1.java
-        //----------------------------------------------------------------------
-        // code ONLY for IntelliJ:
-
         String[] sudokuStr = {"2043", "0020", "4300", "0034"};
 
         Sudoku sudoku = new Sudoku(4, sudokuStr);
@@ -15,17 +12,19 @@ public class SudokuTesting1 {
 
         sudoku.printEasy();
 
-
-
-
         System.out.println("\nsudoku.printIndexesOfCells() -> ");
         sudoku.printIndexesOfCells();
 
+        // for more debugging, print individual lines:
+        sudoku.printOneLine(sudoku.hLines[2]);
 
     }
 }
 
 
+/**
+ * for testing live input in the command line
+ */
 class SudokuLiveInput {
     public static void main(String[] args) {
         // this can be used to live test ANY sudoku by entering the sudoku in the terminal:
@@ -91,6 +90,9 @@ class SudokuLiveInput {
 }
 
 
+/**
+ * more sudoku testing
+ */
 class SudokuTestingExtended {
     public static void main(String[] args) {
 
