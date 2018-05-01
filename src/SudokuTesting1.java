@@ -91,9 +91,9 @@ class SudokuLiveInput {
 
 
 /**
- * more sudoku testing
+ * testing a difficult sudoku, which can not be solved with tbe simple algorithm
  */
-class SudokuTestingExtended {
+class SudokuTestingDifficult {
     public static void main(String[] args) {
 
 

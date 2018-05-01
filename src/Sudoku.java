@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.Scanner;
 
 /**
@@ -29,7 +30,7 @@ class Solution {
  * The main sudoku-class for solving sudokus
  *
  * @author AndiSwiss
- * @version 0.3
+ * @version 0.4
  */
 public class Sudoku {
     /**
@@ -136,9 +137,9 @@ public class Sudoku {
      */
     int[][][] subGroups;
 
-    //-----------------------------------------------------
-    // CONSTRUCTORS:
-    //-----------------------------------------------------
+    //-----------------------------------------------------//
+    // Constructors:                                       //
+    //-----------------------------------------------------//
 
     /**
      * simple Sudoku constructor
@@ -181,9 +182,9 @@ public class Sudoku {
     }
 
 
-    //-----------------------------------------------------
-    //  METHODS FOR CONSTRUCTOR:
-    //-----------------------------------------------------
+    //-----------------------------------------------------//
+    // Methods for the constructors:                       //
+    //-----------------------------------------------------//
 
     /**
      * method to parse a String[] in to int[][][]:
@@ -377,9 +378,9 @@ public class Sudoku {
     }
 
 
-    //-----------------------------------------------------
-    // SUDOKU-SOLVING:
-    //-----------------------------------------------------
+    //-----------------------------------------------------//
+    // Sudoku solving methods:                             //
+    //-----------------------------------------------------//
 
     /**
      * dummy-code for first testing
@@ -686,9 +687,9 @@ public class Sudoku {
     }
 
 
-    //-----------------------------------------------------
-    // PRINTING-FUNCTIONS:
-    //-----------------------------------------------------
+    //-----------------------------------------------------//
+    // Printing methods:                                   //
+    //-----------------------------------------------------//
 
     /**
      * easy print output, also suitable for https://www.codingame.com/ide/puzzle/mini-sudoku-solver:
@@ -846,4 +847,31 @@ public class Sudoku {
         System.out.println(bottomLine);
 
     }
+
+
+    //-----------------------------------------------------//
+    // Auxiliary methods:                                  //
+    //-----------------------------------------------------//
+
+    /**
+     * Tests if two sudokus are the same (only considers the field int[][][] sudoku)
+     * @param o other sudoku to test against
+     * @return true or false
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Sudoku sudoku1 = (Sudoku) o;
+        return Arrays.equals(sudoku, sudoku1.sudoku);
+    }
+
+    /**
+     * @return the hashCode of the sudoku (only considers the field int[][][] sudoku)
+     */
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(sudoku);
+    }
+
 }
