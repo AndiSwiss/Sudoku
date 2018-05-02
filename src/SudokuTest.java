@@ -110,6 +110,7 @@ class SudokuTest {
             }
 
             List<String> failed = new ArrayList<>();
+            int successful = 0;
 
             for (Path file : filePaths) {
                 List<String> oneFile = new ArrayList<>();
@@ -136,15 +137,23 @@ class SudokuTest {
                 Sudoku sudoku = new Sudoku(9, sudokuStr);
 
                 int solve = sudoku.solve();
-                if (solve != 1) {
+                if (solve == 1) {
+                    successful++;
+                } else {
                     Path relative = Paths.get(current).relativize(file);
-                    failed.add(relative.toString() + " didn't have one solution left, but " + solve + " solutions.");
+                    failed.add(relative.toString() + " didn't have one solution left, but "
+                            + solve + " solutions.");
                 }
             }
 
+            System.out.printf("%d easy sudokus were successfully solved, " +
+                            "each with one unique solution.\n"
+                    , successful);
+
             StringBuilder sb = new StringBuilder();
             if (failed.size() > 0) {
-                sb.append(failed.size()).append(" sudokus don't have just 1 definitive solutions or were not yet solved:\n");
+                sb.append(failed.size()).append(" sudokus don't have just 1 definitive solutions " +
+                        "or were not yet solved:\n");
                 failed.forEach(s -> sb.append(s).append('\n'));
             }
 
